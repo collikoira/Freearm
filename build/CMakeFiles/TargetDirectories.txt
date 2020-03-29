@@ -1,0 +1,3 @@
+/home/antti/Documents/freearm/src/build/CMakeFiles/rebuild_cache.dir
+/home/antti/Documents/freearm/src/build/CMakeFiles/FREEARM.dir
+/home/antti/Documents/freearm/src/build/CMakeFiles/edit_cache.dir

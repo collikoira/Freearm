@@ -1,0 +1,21 @@
+#!/bin/bash
+
+#DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+DIR=/home/antti/Documents/freearm/src
+if [ ! -d $DIR/build ]; then
+	mkdir $DIR/build
+fi
+cd $DIR/build
+
+# To get the rootfs which is required here, use:
+# rsync -rl --delete-after --safe-links pi@192.168.1.PI:/{lib,usr} $HOME/rpi/rootfs
+
+export RASPBIAN_ROOTFS=$HOME/raspberrypi/rootfs/
+export PATH=/opt/cross-pi-gcc/bin:/opt/cross-pi-gcc/libexec/gcc/arm-linux-gnueabihf/8.3.0:$PATH
+export RASPBERRY_VERSION=1
+
+cmake -DCMAKE_TOOLCHAIN_FILE=$DIR/Toolchain-rpi.cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo $DIR
+make -j
+sleep 2
+scp /home/antti/Documents/freearm/src/build/FREEARM pi@192.168.0.102:/home/pi/remote/FREEARM
+ssh -t pi@192.168.0.102 sudo gdbserver --multi 192.168.0.102:2011 /home/pi/remote/FREEARM
